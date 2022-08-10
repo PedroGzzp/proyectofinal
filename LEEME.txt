@@ -1,0 +1,5 @@
+Credenciales de administrador
+	User: admin
+	Password: 123
+
+*Todos los usuarios nuevos registrados se crearan con perfil distinto al de administrador.
