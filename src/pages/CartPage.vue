@@ -35,22 +35,16 @@
 </template>
 
 <script>
-  import axios from 'axios'
   export default  {
     name: 'cart-page',
     props: [],
     async mounted () {
       this.nombreUsuario = this.$store.state.logged.nombre
+      this.listaCarrito = this.$store.state.carrito
+      
       if(!this.$store.state.logged.id){
         this.$router.push("login")
       }
-      try{
-          const respuestaCarrito = await axios.get(`https://62df4289976ae7460be99a23.mockapi.io/carrito`);
-          this.listaCarrito = respuestaCarrito.data
-        }
-        catch (error) {
-            console.log(error);
-        }
     },
     data () {
       return {
@@ -65,22 +59,9 @@
       async eliminarDelCarrito(payload){
         let text = "¿Estas seguro de eliminar este articulo del carrito?";
         if (confirm(text) == true) {
-          try{
-          await axios.delete(`https://62df4289976ae7460be99a23.mockapi.io/carrito/${payload.id}`);
-          this.actualizarDatos()
-        }catch (error) {
-          console.log(error);
+          this.$store.dispatch("eliminarDelCarrito",payload)
+          this.$store.dispatch("getCarrito")
         }
-        }
-      },
-      async actualizarDatos(){
-        try{
-            const respuestaCarrito = await axios.get(`https://62df4289976ae7460be99a23.mockapi.io/carrito`);
-            this.listaCarrito = respuestaCarrito.data
-          }
-          catch (error) {
-              console.log(error);
-          }
       }
     },
     computed: {

@@ -29,7 +29,6 @@ export default new Vuex.Store({
         },
         logOutUser: (state) => {
             state.carrito = [],
-            state.listaProductos = [],
             state.logged = []
         }
     },
@@ -60,6 +59,7 @@ export default new Vuex.Store({
             catch (error) {
                 console.log(error);
             }
+            
         },
         async getDetalleProducto(context, payload) {
             try{
@@ -97,6 +97,48 @@ export default new Vuex.Store({
                 console.log(error);
               }
         },
+        async agregarAlCarrito(context, payload){   
+            
+            let cantidadCarrito = this.state.carrito.find(i=> i.productoId === payload.id)
+
+            if(cantidadCarrito){
+              let cantidadActual = cantidadCarrito.cantidad + 1
+              try {
+                const agregarArticulo = {
+                  cantidad: cantidadActual
+                };
+                await axios.put(`https://62df4289976ae7460be99a23.mockapi.io/carrito/${cantidadCarrito.id}`, agregarArticulo);
+              }
+              catch (error) {
+                console.log(error);
+              }
+            }else{
+              try {
+                const agregarArticulo = {
+                  productoId: payload.id,
+                  cantidad: 1,
+                  tipo_cerveza : payload.tipo_cerveza,
+                  imagen: payload.imagen,
+                  precio: payload.precio,
+                  nombre: payload.nombre,
+    
+                };
+                await axios.post(`https://62df4289976ae7460be99a23.mockapi.io/carrito`, agregarArticulo);
+              }
+              catch (error) {
+                console.log(error);
+              }
+            }
+            context.dispatch('getCarrito');
+          },
+          async eliminarDelCarrito(context, payload){
+              try{
+              await axios.delete(`https://62df4289976ae7460be99a23.mockapi.io/carrito/${payload.id}`);
+                }catch (error) {
+              console.log(error);
+                }
+                context.dispatch('getCarrito');
+          },
         logOut(context){
             context.commit("logOutUser")
         }

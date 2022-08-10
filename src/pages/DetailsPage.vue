@@ -33,15 +33,24 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default  {
     name: 'details-page',
     props: [],
-    mounted () {
+    async mounted () {
       if(!this.$store.state.logged.id){
         this.$router.push("login")
       }
 
-      this.articulo = this.$store.state.detalleProducto
+      let idArticulo = localStorage.getItem("articulo")
+      try{
+        const respuestaArticulo = await axios.get(`https://62df4289976ae7460be99a23.mockapi.io/inventario/${idArticulo}`);
+        this.articulo = respuestaArticulo.data
+      }
+      catch (error) {
+          this.vacio = true
+          console.log(error);
+      }
     },
     data () {
       return {

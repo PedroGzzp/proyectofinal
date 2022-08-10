@@ -44,7 +44,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
   export default  {
     name: 'main-page',
     props: [],
@@ -53,7 +52,6 @@
       if(!this.nombreUsuario){
         this.$router.push("login")
       }
-      // this.$store.dispatch("getProductos")
       this.listaInventario = this.$store.state.listaProductos
     },
     data () {
@@ -65,51 +63,12 @@
     },
     methods: {
       async agregarAlCarrito(payload){
-        try{
-          const respuestaCarrito = await axios.get(`https://62df4289976ae7460be99a23.mockapi.io/carrito`);
-          this.listaCarrito = respuestaCarrito.data
-        }
-        catch (error) {
-            console.log(error);
-        }
-
-        let cantidadCarrito = this.listaCarrito.find(i=> i.productoId === payload.id)
-
-        if(cantidadCarrito){
-          console.log(cantidadCarrito.id)
-          this.cantidad = cantidadCarrito.cantidad + 1
-          try {
-            const agregarArticulo = {
-              cantidad: this.cantidad
-            };
-            await axios.put(`https://62df4289976ae7460be99a23.mockapi.io/carrito/${cantidadCarrito.id}`, agregarArticulo);
-          }
-          catch (error) {
-            console.log(error);
-          }
-        }else{
-          try {
-            const agregarArticulo = {
-              productoId: payload.id,
-              cantidad: 1,
-              tipo_cerveza : payload.tipo_cerveza,
-              imagen: payload.imagen,
-              precio: payload.precio,
-              nombre: payload.nombre,
-
-            };
-            await axios.post(`https://62df4289976ae7460be99a23.mockapi.io/carrito`, agregarArticulo);
-          }
-          catch (error) {
-            console.log(error);
-          }
-        }
+        this.$store.dispatch("agregarAlCarrito", payload)
         // eslint-disable-next-line
         $('#alertaCarrito').toast('show')
       },
       infoProducto(payload){
-        this.$store.dispatch("getDetalleProducto", payload)
-        // localStorage.setItem("articulo", payload)
+        localStorage.setItem("articulo", payload)
         this.$router.push('details')
       }
     },

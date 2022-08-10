@@ -49,7 +49,8 @@ export default {
   },
   mounted(){
     this.$store.dispatch("getUsuarios")
-    this.$store.dispatch("getProductos") 
+    this.$store.dispatch("getProductos")
+    this.$store.dispatch("getCarrito")
   },
   methods:{
     mensajeAltaUsuario(){
@@ -60,7 +61,6 @@ export default {
       let text = "¿Estas seguro de salir?";
       if (confirm(text) == true) {
         this.$store.dispatch("logOut")
-        // localStorage.clear();
         this.$router.push("login")
       }
     }
