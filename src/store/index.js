@@ -1,9 +1,7 @@
-import Vuex from 'vuex';
-import Vue from 'vue';
+import {createStore} from 'vuex'
 
-Vue.use(Vuex)
 import axios from 'axios'
-export default new Vuex.Store({
+export default new createStore({
     state:{
         carrito: [],
         listaUsuarios: [],
@@ -28,7 +26,6 @@ export default new Vuex.Store({
             state.logged = payload
         },
         logOutUser: (state) => {
-            state.carrito = [],
             state.logged = []
         }
     },
@@ -139,8 +136,13 @@ export default new Vuex.Store({
                 }
                 context.dispatch('getCarrito');
           },
-        logOut(context){
+        async logOut(context){
             context.commit("logOutUser")
         }
+    },
+    getters:{
+      loggeado: state => state.logged,
+      carrito: state => state.carrito,
+      detalleProducto : state => state.detalleProducto
     }
 })

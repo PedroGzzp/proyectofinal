@@ -5,8 +5,8 @@
     <hr>
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-8 col-lg-8" v-if="listaCarrito.length">
-          <div class="item-carrito" v-for="(carrito, index) in listaCarrito" :key="index">
+        <div class="col-sm-12 col-md-8 col-lg-8" v-if="VuexCarrito.length">
+          <div class="item-carrito" v-for="(carrito, index) in VuexCarrito" :key="index">
             <div><img :src="carrito.imagen" :alt="carrito.nombre"></div>
             <div class="text-start">
               Artículo: 
@@ -35,12 +35,12 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
   export default  {
     name: 'cart-page',
     props: [],
     async mounted () {
       this.nombreUsuario = this.$store.state.logged.nombre
-      this.listaCarrito = this.$store.state.carrito
       
       if(!this.$store.state.logged.id){
         this.$router.push("login")
@@ -48,7 +48,6 @@
     },
     data () {
       return {
-        listaCarrito:[],
         precioTotal: 0,
       }
     },
@@ -66,10 +65,13 @@
     },
     computed: {
       total(){
-        return this.listaCarrito.reduce((acc, carrito) => {
+        return this.VuexCarrito.reduce((acc, carrito) => {
           return acc + (carrito.precio * carrito.cantidad)
         }, 0)
-      }
+      },
+      ...mapGetters({
+        VuexCarrito : 'carrito'
+      })
     }
 }
 

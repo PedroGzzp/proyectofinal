@@ -1,18 +1,17 @@
 <template>
 <section>
-  <div id="app">
-  <nav class="navbar navbar-expand-lg bg-light fixed-top">
+  <div id="app" :class="{'mt-60' : this.loggeado.length != 0}">
+  <nav v-if="this.loggeado.length != 0" class="navbar navbar-expand-lg bg-light fixed-top">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav text-end">
-          <router-link class="nav-link" to="/login">Login</router-link>
-          <router-link class="nav-link" to="/signIn">Sing In</router-link>
+        <div class="navbar-nav">
+          <!-- <router-link class="nav-link" to="/login">Login</router-link>
+          <router-link class="nav-link" to="/signIn">Sing In</router-link> -->
           <router-link class="nav-link" to="/main">Home</router-link>
-          <router-link class="nav-link" to="/admin">Admin</router-link>
-          <router-link class="nav-link" to="/details">Detalles</router-link>
+          <router-link v-if="this.loggeado.perfil === 1" class="nav-link" to="/admin">Admin</router-link>
           <router-link class="nav-link" to="/cart">Carrito</router-link>
           <button @click="logout" class="btn btn-danger">Logout</button>
         </div>
@@ -37,6 +36,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
   name: 'App',
   components: {
@@ -64,19 +64,23 @@ export default {
         this.$router.push("login")
       }
     }
+  },
+  computed:{
+    ...mapGetters({
+      loggeado: 'loggeado'
+    })
   }
 }
 </script>
 
 <style>
-<!-- #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} -->
+.navbar-nav{
+  margin-left: auto;
+}
+
+.mt-60{
+  margin-top:60px;
+}
 
 :root{
   --grid-desktop-horizontal: 24px;

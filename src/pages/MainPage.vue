@@ -62,13 +62,14 @@
       }
     },
     methods: {
-      async agregarAlCarrito(payload){
+      agregarAlCarrito(payload){
         this.$store.dispatch("agregarAlCarrito", payload)
         // eslint-disable-next-line
         $('#alertaCarrito').toast('show')
       },
       infoProducto(payload){
-        localStorage.setItem("articulo", payload)
+        this.$store.dispatch("getDetalleProducto", payload)
+        // localStorage.setItem("articulo", payload)
         this.$router.push('details')
       }
     },
@@ -133,6 +134,11 @@ td.active{
 }
 .btn-close{
   background-color: #ffffff;
+}
+@media screen and (max-width: 1550px){
+li{
+  max-width: 240px;
+}
 }
 @media screen and (min-width: 500px) and (max-width: 768px){
 li{
