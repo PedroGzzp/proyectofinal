@@ -5,112 +5,65 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-sm-12 col-md-10">
-        <h2 class="text-start">Lista Usuarios</h2>
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Usuario</th>
-              <th>Perfil</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(usuario, index)  in VuexUsuarios" :key="index">
-              <td>{{usuario.nombre}} {{usuario.apellidos}}</td>
-              <td>{{usuario.email}}</td>
-              <td>{{usuario.usuario}}</td>
-              <td v-if="usuario.perfil === 1">Administrador</td>
-              <td v-if="usuario.perfil === 2">Usuario</td>
-              <td><button @click="eliminarUsuario(usuario)" class="btn btn-danger">Eliminar Usuario</button></td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-10">
-        <h2 class="text-start">Alta inventario</h2>
+        <h2 class="text-start">Modificar artículo</h2>
           <div class="contenedor-tarjeta">
           <form class="row g-3">
             <div class="col-sm-12 col-md-6 text-start">
               <label for="Nombre_Articulo">Nombre Artículo</label>
-              <input class="form-control" type="text" name="Nombre_Articulo" placeholder="Ejemplo: XX ambar" v-model="nombre_articulo">
+              <input class="form-control" type="text" name="Nombre_Articulo" placeholder="Ejemplo: XX ambar" v-model="VuexArticulo.nombre" id="nombre_articulo" >
               <div v-if="alertaNombreArticulo" class="form-text text-danger">Campo Requerido</div>
             </div>
             <div class="col-sm-12 col-md-6 text-start">
               <label for="Tipo_cerveza">Tipo de Cerveza</label>
-              <input class="form-control" type="text" name="Tipo_cerveza" placeholder="Ejemplo: Pale Lager, American-Style Lager" v-model="tipo_cerveza">
+              <input class="form-control" type="text" name="Tipo_cerveza" placeholder="Ejemplo: Pale Lager, American-Style Lager" v-model="VuexArticulo.tipo_cerveza" id="tipo_cerveza">
               <div v-if="alertaTipoCerveza" class="form-text text-danger">Campo Requerido</div>
             </div>
             <div class="col-sm-12 col-md-6 text-start">
               <label for="precio">Precio</label>
-              <input class="form-control" type="number" name="precio" min="0" placeholder="Ejemplo: 19.55" v-model.number="precio">
+              <input class="form-control" type="number" name="precio" min="0" placeholder="Ejemplo: 19.55" v-model="VuexArticulo.precio" id="precio">
               <div v-if="alertaPrecio" class="form-text text-danger">Campo Requerido</div>
             </div>
             <div class="col-sm-12 col-md-6 text-start">
               <label for="opinion">Opinion</label>
-              <input class="form-control" type="number" max="5" min="0" name="opinion" placeholder="Ejemplo: 4.5" v-model.number="opinion">
+              <input class="form-control" type="number" max="5" min="0" name="opinion" placeholder="Ejemplo: 4.5" v-model="VuexArticulo.opinion" id="opinion">
               <div v-if="alertaOpinion" class="form-text text-danger">Campo Requerido</div>
             </div>
             <div class="col-sm-12 col-md-6 text-start">
               <label for="pais">País</label>
-              <input class="form-control" type="text" name="pais" placeholder="Ejemplo: Alemania" v-model="pais">
+              <input class="form-control" type="text" name="pais" placeholder="Ejemplo: Alemania" v-model="VuexArticulo.pais" id="pais">
               <div v-if="alertaPais" class="form-text text-danger">Campo Requerido</div>
             </div>
             <div class="col-sm-12 col-md-6 text-start">
               <label for="ruta_imagen">Ruta imagen</label>
-              <input class="form-control" type="text" name="ruta_imagen" placeholder="Ejemplo: https://drive.google.com/file/d/1Cj-VNsG0w6uVuQfcf2_tVwTNTNZLkMyG/view" v-model="ruta_imagen">
+              <input class="form-control" type="text" name="ruta_imagen" placeholder="Ejemplo: https://drive.google.com/file/d/1Cj-VNsG0w6uVuQfcf2_tVwTNTNZLkMyG/view" v-model="VuexArticulo.imagen" id="ruta_imagen">
               <div v-if="alertaImagen" class="form-text text-danger">Campo Requerido</div>
             </div>
             <div class="col-sm-12 col-md-12 text-start">
               <label for="descripcion">Descripción</label>
-              <textarea class="form-control" name="descripcion" v-model="descripcion"></textarea>
+              <textarea class="form-control" name="descripcion" v-model="VuexArticulo.descripcion" id="descripcion"></textarea>
               <div v-if="alertaDescripcion" class="form-text text-danger">Campo Requerido</div>
             </div>
           </form>
               <br>
               <div class="d-grid gap-2">
-                <button class="btn btn-primary" @click="altaArticulo()">Agregar al inventario</button>
+                <button class="btn btn-primary" @click="modificarArticulo()">Modificar artículo</button>
+              </div>
+              <br>  
+              <div class="text-end">
+                <button class="btn btn-secondary" @click="cancelar()">Cancelar</button>
               </div>
           </div>
         </div>
       </div>
     </div>
     <br><br>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-sm-12 col-md-10">
-          <h2 class="text-start">Baja inventario</h2>
-          <table class="table table-bordered table-striped inventario">
-            <thead>
-              <th></th>
-              <th>Nombre Cerveza</th>
-              <th></th>
-              <th></th>
-            </thead>
-            <tbody>
-              <tr v-for="(articulo, index) in VuexArticulos" :key="index" >
-              <td><img :src="articulo.imagen" width="75"></td>
-              <td>{{articulo.nombre}}</td>
-              <td><button @click="modificarArticulo(articulo)" class="btn btn-primary">Modificar artículo</button></td>
-              <td><button @click="eliminarArticulo(articulo)" class="btn btn-danger">Eliminar artículo</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+
 
     <div class="toast-container position-fixed top-0 end-0 p-3">
         <div id="alertaCarrito" class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="d-flex">
             <div class="toast-body">
-              <p>Artículo agregado al inventario.</p>
+              <p>Artículo modificado.</p>
             </div>
             <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
@@ -124,20 +77,13 @@
 <script>
   import {mapGetters} from 'vuex'
   export default  {
-    name: 'admin-page',
+    name: 'modificar-page',
     props: [],
     mounted () {
     },
     data () {
       return {
         nombreUsuario: "",
-        nombre_articulo: '',
-        tipo_cerveza: '',
-        precio: '',
-        opinion: '',
-        pais: '',
-        ruta_imagen: '',
-        descripcion: '',
         alertaNombreArticulo: false,
         alertaTipoCerveza: false,
         alertaPrecio: false,
@@ -149,14 +95,10 @@
       }
     },
     methods: {
-      eliminarUsuario(payload){
-          let text = "¿Estas seguro de eliminar este usuario?";
-          if (confirm(text) == true) {
-            this.$store.dispatch("deleteUsuario", payload.id)
-            this.$store.dispatch("getUsuarios")
-          }
+      cancelar(){
+        this.$router.push("admin")
       },
-      altaArticulo(){
+      modificarArticulo(){
         this.validarNombreCerveza()
         this.validarTipoCerveza()
         this.validarPrecioCerveza()
@@ -166,20 +108,18 @@
         this.validarDescripcionCerveza()
         if(this.validarNombreCerveza() && this.validarTipoCerveza() && this.validarPrecioCerveza() && this.validarOpinionCerveza() && this.validarPaisCerveza() && this.validarRutaImagen() && this.validarDescripcionCerveza()){
           try {
-            const nuevoArticulo = {
-              nombre: this.nombre_articulo,
-              tipo_cerveza: this.tipo_cerveza,
-              precio: this.precio,
-              opinion: this.opinion,
-              pais: this.pais,
-              imagen: this.ruta_imagen,
-              descripcion: this.descripcion
-
-            };
-            this.$store.dispatch("setArticulo", nuevoArticulo)
-            // eslint-disable-next-line
-            $('#alertaCarrito').toast('show')
-            this.actualizarInventario()
+            const articuloModificado = {
+              nombre: this.VuexArticulo.nombre,
+              tipo_cerveza: this.VuexArticulo.tipo_cerveza,
+              precio: this.VuexArticulo.precio,
+              opinion: this.VuexArticulo.opinion,
+              pais: this.VuexArticulo.pais,
+              imagen: this.VuexArticulo.ruta_imagen,
+              descripcion: this.VuexArticulo.descripcion,
+              id: this.VuexArticulo.id
+            }
+            this.$store.dispatch("updateArticulo", articuloModificado)
+            this.$router.push("admin")
           }
           catch (error) {
             console.log(error);
@@ -187,7 +127,7 @@
         }
       },
       validarNombreCerveza(){
-        if(this.nombre_articulo != ''){
+        if(this.VuexArticulo.nombre != ''){
           this.alertaNombreArticulo = false
           return true
         }else{
@@ -195,7 +135,7 @@
         }
       },
       validarTipoCerveza(){
-        if(this.tipo_cerveza != ''){
+        if(this.VuexArticulo.tipo_cerveza != ''){
           this.alertaTipoCerveza = false
           return true
         }else{
@@ -203,7 +143,7 @@
         }
       },
       validarPrecioCerveza(){
-        if(this.precio != 0 && this.precio != ''){
+        if(this.VuexArticulo.precio != 0 && this.VuexArticulo.precio != ''){
           this.alertaPrecio = false
           return true
         }else{
@@ -211,7 +151,7 @@
         }
       },
       validarOpinionCerveza(){
-        if(this.opinion != 0 && this.opinion != ''){
+        if(this.VuexArticulo.opinion != 0 && this.VuexArticulo.opinion != ''){
           this.alertaOpinion = false
           return true
         }else{
@@ -219,7 +159,7 @@
         }
       },
       validarPaisCerveza(){
-        if(this.pais != ''){
+        if(this.VuexArticulo.pais != ''){
           this.alertaPais = false
           return true
         }else{
@@ -227,7 +167,7 @@
         }
       },
       validarRutaImagen(){
-        if(this.ruta_imagen != ''){
+        if(this.VuexArticulo.ruta_imagen != ''){
           this.alertaImagen = false
           return true
         }else{
@@ -235,16 +175,12 @@
         }
       },
       validarDescripcionCerveza(){
-        if(this.descripcion != ''){
+        if(this.VuexArticulo.descripcion != ''){
           this.alertaDescripcion = false
           return true
         }else{
           this.alertaDescripcion = true
         }
-      },
-      modificarArticulo(payload){
-        this.$store.dispatch("getDetalleProducto", payload.id)
-        this.$router.push("modificar")
       },
       eliminarArticulo(payload){
         let texto = "¿Estas seguro de eliminar este artículo?";
@@ -256,8 +192,7 @@
     },
     computed: {
       ...mapGetters({
-        VuexUsuarios: 'usuarios',
-        VuexArticulos : 'articulos'
+        VuexArticulo : 'detalleProducto'
       })
     }
 }

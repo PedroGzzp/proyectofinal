@@ -85,9 +85,28 @@ export default new createStore({
                 console.log(error);
               }
         },
+        async updateArticulo(context, payload){
+          console.log(payload.nombre)
+            try {
+              const modificarArticulo = {
+                nombre: payload.nombre,
+                tipo_cerveza: payload.tipo_cerveza,
+                precio: payload.precio,
+                opinion: payload.opinion,
+                pais: payload.pais,
+                imagen: payload.ruta_imagen,
+                descripcion: payload.descripcion  
+              }
+              await axios.put(`https://62df4289976ae7460be99a23.mockapi.io/inventario/${payload.id}`, modificarArticulo);
+            }
+            catch (error) {
+              console.log(error);
+            }
+            context.dispatch('getProductos');
+        },
         async deleteUsuario(context, payload){
             try {
-                await axios.post(`https://62df4289976ae7460be99a23.mockapi.io/usuarios/${payload}`);
+                await axios.delete(`https://62df4289976ae7460be99a23.mockapi.io/usuarios/${payload}`);
                 context.dispatch('getUsuarios');
               }
               catch (error) {
@@ -136,13 +155,75 @@ export default new createStore({
                 }
                 context.dispatch('getCarrito');
           },
+          async eliminararticulo(context, payload){
+            try{
+            await axios.delete(`https://62df4289976ae7460be99a23.mockapi.io/inventario/${payload}`);
+              }catch (error) {
+            console.log(error);
+              }
+              context.dispatch('getProductos');
+        },
         async logOut(context){
             context.commit("logOutUser")
-        }
+        },
+        async sumarCantidad(context, payload){
+          const agregar = {
+            cantidad: payload.cantidad + 1
+          }
+            try {
+              await axios.put(`https://62df4289976ae7460be99a23.mockapi.io/carrito/${payload.id}`, agregar);
+              context.dispatch('getCarrito');
+            }
+            catch (error) {
+              console.log(error);
+            }
+          },
+          async restarrCantidad(context, payload){
+            const restar = {
+              cantidad: payload.cantidad - 1
+            }
+              try {
+                await axios.put(`https://62df4289976ae7460be99a23.mockapi.io/carrito/${payload.id}`, restar);
+                context.dispatch('getCarrito');
+              }
+              catch (error) {
+                console.log(error);
+              }
+            },
+          async enviarPedido(context, payload){
+            try {
+              const pedido = {
+                orden: payload.orden,
+                total: payload.total,
+                usuario: payload.usuario  
+              };
+              await axios.post(`https://62df4289976ae7460be99a23.mockapi.io/pedidos`, pedido);
+              context.dispatch('eliminarCarrito');
+            }
+            catch (error) {
+              console.log(error);
+            }
+          }, 
+          async eliminarCarrito(context){
+            try {
+            /* eslint-disable */
+            let arrayLength = this.state.carrito.length;
+              for(let i = 0 ; i < arrayLength; i++) {
+                  
+                let val = this.state.carrito[i].id;
+                await axios.delete(`https://62df4289976ae7460be99a23.mockapi.io/carrito/${val}`)
+              }
+            }catch (error) {
+              console.log(error);
+            }  
+            context.dispatch('getCarrito');      
+          }
     },
     getters:{
       loggeado: state => state.logged,
       carrito: state => state.carrito,
-      detalleProducto : state => state.detalleProducto
+      detalleProducto : state => state.detalleProducto,
+      articulos: state => state.listaProductos,
+      usuarios: state => state.listaUsuarios
     }
 })

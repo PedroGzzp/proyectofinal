@@ -24,6 +24,9 @@
               <span>Opinión:</span>
               <p>{{articulo.opinion}} / 5</p>
               <a href="#" class="btn btn-primary" @click="agregarAlCarrito(articulo)">Agregar al carrito</a>
+              <br><br>
+              <a href="#" class="btn btn-secondary" @click="cancelar">Regresar</a>
+              
             </div>
           </div>  
         </div>
@@ -49,9 +52,6 @@
     name: 'details-page',
     props: [],
     mounted () {
-      if(!this.$store.state.logged.id){
-        this.$router.push("login")
-      }
       this.loaded()
     },
     data () {
@@ -69,6 +69,9 @@
         setTimeout(() => {
           this.cargado = true
         }, 200);
+      },
+      cancelar(){
+        this.$router.push("main")
       }
     },
     computed: {

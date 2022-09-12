@@ -5,6 +5,7 @@ import SignInPage from './pages/SignInPage'
 import MainPage from './pages/MainPage'
 import AdminPage from './pages/AdminPage'
 import DetailsPage from './pages/DetailsPage'
+import ModificarPage from './pages/ModificarPage'
 import CartPage from './pages/CartPage'
 
 const routes = [
@@ -36,6 +37,12 @@ const routes = [
         path: '/details',
         name: 'details',
         component: DetailsPage,
+        props: true
+    },
+    {
+        path: '/modificar',
+        name: 'modificar',
+        component: ModificarPage,
         props: true
     },
     {

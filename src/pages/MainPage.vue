@@ -14,7 +14,7 @@
           <div class="col-sm-12 col-md-10 col-lg-12">
             <div class="productos">
               <ul>
-              <li v-for="(items, index) in listaInventario" :key="index">
+              <li v-for="(items, index) in VuexArticulos" :key="index">
                 <div class="card">
                   <img @click="infoProducto(items.id)" :src="items.imagen" class="card-img-top" :alt="items.nombre">
                   <div class="card-body">
@@ -44,20 +44,16 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   export default  {
     name: 'main-page',
     props: [],
     mounted () {
       this.nombreUsuario = this.$store.state.logged.nombre
-      if(!this.nombreUsuario){
-        this.$router.push("login")
-      }
-      this.listaInventario = this.$store.state.listaProductos
     },
     data () {
       return {
         nombreUsuario: "",
-        listaInventario: [],
         cantidad: 0
       }
     },
@@ -69,12 +65,13 @@
       },
       infoProducto(payload){
         this.$store.dispatch("getDetalleProducto", payload)
-        // localStorage.setItem("articulo", payload)
         this.$router.push('details')
       }
     },
     computed: {
-
+      ...mapGetters({
+        VuexArticulos : 'articulos'
+      })
     }
 }
 
